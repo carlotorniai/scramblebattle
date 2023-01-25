@@ -1,0 +1,122 @@
+#game {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* three columns */
+    grid-template-rows: auto auto auto; /* multiple rows */
+    align-items: center; /* align the elements horizontally center */
+    justify-content: center; /* align the elements vertically center */
+    grid-gap: 10px; /* space between elements */
+}
+
+#score {
+    grid-column: 1 / 2; /* span one column */
+    grid-row: 1 / 2; /* span one row */
+    align-self: flex-start; /* align the element vertically top */
+    text-align: left; /* align the text to the left */
+    font-size: 20px; 
+}
+
+#round {
+    grid-column: 2 / 3; /* span one column */
+    grid-row: 1 / 2; /* span one row */
+    align-self: center; /* align the element vertically center */
+    text-align: center; /* center the text */
+    font-size: 20px; 
+}
+
+#word-length {
+    grid-column: 3 / 4; /* span one column */
+    grid-row: 1 / 2; /* span one row */
+    align-self: flex-end; /* align the element vertically bottom */
+    text-align: right; /* align the text to the right */
+    font-size: 20px; 
+}
+
+#timer {
+    grid-column: 1 / 4; /* span three columns */
+    grid-row: 2 / 3; /* span one row */
+    text-align: center; /* center the text */
+    font-size: 30px; /* increase font size */
+}
+
+/* #word {
+/*    grid-column: 1 / 4; /* span three columns */
+/*     grid-row: 3 / 4; /* span one row */
+/*     display: flex; /* add display flex to the parent container */
+/*     align-items: center; /* align the letters vertically center */
+/*     justify-content: center; /* align the letters horizontally center */
+/*} */
+
+/* #word {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap; /* flex-wrap is set to nowrap */
+ /*   text-align: center; /* center align the text inside #word */
+/*} */
+
+#word {
+    grid-column: 1 / 4; /* span three columns */
+    grid-row: 3 / 4; /* span one row */
+    display: flex; /* add display flex to the parent container */
+    align-items: center; /* align the letters vertically center */
+    justify-content: center; /* align the letters horizontally center */
+}
+
+#answer {
+    grid-column: 1 / 4; /* span three columns */
+    grid-row: 4 / 5; /* span one row */
+    width: 100%; /* make the input full width */
+    text-align: center; /* center the input */
+    font-size: 20px; /* increase font size */
+}
+
+#submit {
+    grid-column: 1 / 4; /* span three columns */
+    grid-row: 5 / 6; /* span one row */
+    width: 100%; /* make the button full width */
+    text-align: center; /* center the button */
+}
+
+#message {
+    grid-column: 1 / 4; /* span three columns */
+    grid-row: 6 / 7; /* span one row */
+    text-align: center; /* center the message */
+    font-size: 20px; /* increase font size */
+}
+
+#word .letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    margin: 10px;
+    border-radius: 10%;
+    box-sizing: border-box;
+    background-color: darkblue; /* change the background color to light blue */
+    color: white; /* change the letter color to white */
+    padding: 10px;
+    text-transform: uppercase; /* add this line */
+}
+
+
+#input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%; /* make the container 80% width */
+    margin: 0 auto; /* center the container horizontally */
+}
+
+#answer {
+    width: 100%; /* make the input full width */
+    text-align: center; /* center the input */
+    font-size: 20px; /* increase font size */
+}
+
+#submit {
+    width: 20%; /* make the button 20% width */
+    text-align: center; /* center the button */
+    margin-left: 10px; /* add some margin on the left side */
+}

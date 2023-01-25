@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Word Unscrambling Game</title>
+  <link rel="stylesheet" type="text/css" href="newstyle.css">
+</head>
+<body>
+  <div id="game">
+    <div id="score">Score: 0</div>  
+    <div id="round"></div>
+    <div id="word-length"></div>
+    <div id="timer"></div>
+    <div id="word"></div>
+    <div id="input-container">
+      <input type="text" id="answer" oninput="this.value = this.value.toUpperCase()"></input>
+        <button id="submit">Submit</button>
+    </div>
+    <div id="message"></div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
