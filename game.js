@@ -8,9 +8,10 @@ Major
 - Deal with words with multiple anagrams
 - create the daily ladder and cookie for user stats like high score and highest nu,ber of owrds / time of completion
 
-- See how to deal with the sttic page of recap
 
 Minor
+- See how to deal with the sttic page of recap
+
 - make sure it works with restarting by : setting the score to zero, 
 - fix the timer upon starting round
 - all the freaking visuals need to change
@@ -56,6 +57,7 @@ function scramble(word) {
 function startGame() {
     startTime = new Date();
     if (round > 10) {
+        // deal with all the info of game over
         message.innerHTML = "Game over ";
         clearInterval(intervalId);
         document.getElementById("timer").value = "";
