@@ -20,7 +20,7 @@ var score = 0;
 var wordList = [];
 var startTime;
 var selectedWord;
-var gameDuration = 10000; // 20 seconds in milliseconds
+var gameDuration = 20000; // 20 seconds in milliseconds
 var round = 1;
 var intervalId;
 var rounds = [];
@@ -40,6 +40,7 @@ async function readSelectedWords() {
   }
 }
 
+// Fetch the words of the day
 fetch('selected_words.txt')
   .then(response => response.text())
   .then(data => {
@@ -50,21 +51,7 @@ fetch('selected_words.txt')
   .catch(err => console.log(`Error: ${err}`));
 
 console.log(selectedWords);
-// fetch("./parole.txt")
-//   .then(response => response.text())
-//   .then(data => {
-//     var words = data.split("\n");
-//     for(var i = 5; i<=15; i++){
-//       var filteredWords = words.filter(word => word.length === i);
-//       var selectedWord = filteredWords[Math.floor(Math.random() * filteredWords.length)];
-//       wordList.push(selectedWord);
-//       if (wordList.length === 10) {
-//         break;
-//       }
-//     }
-//     startGame();
-//   })
-//   .catch(error => console.log(error));
+
 
 // Scramble a word
 function scramble(word) {

@@ -1,7 +1,7 @@
 import random
 
 # Define the fixed length of the 5 words
-word_lengths = [5, 7, 9, 11, 13]
+word_lengths = [5, 6, 7, 8, 9]
 
 print("Reading words from file...")
 try:
