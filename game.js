@@ -65,6 +65,15 @@ function scramble(word) {
     return scrambledWord;
 }
 
+
+// sdd the event listener to the answer 
+document.getElementById("answer").addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    document.getElementById("submit").click();
+  }
+});
+
 startGame();
 
 function startGame() {
@@ -161,12 +170,7 @@ function startGame() {
 
     // clear the input 
     document.getElementById("answer").value = "";
-    document.getElementById("answer").addEventListener("keyup", function(event) {
-      if (event.keyCode === 13) {
-        event.preventDefault();
-        document.getElementById("submit").click();
-      }
-    });
+ 
 
     // check the answer
     document.getElementById("submit").removeEventListener("click", checkAnswer);
