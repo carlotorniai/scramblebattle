@@ -119,7 +119,6 @@ function checkAnswer() {
         startGame();
       }, 2000);
     } else {
-        console.log("sono nell Else")
         message.innerHTML = "Incorrect. The correct word was " + selectedWord;
         clearInterval(intervalId);
         round++;
