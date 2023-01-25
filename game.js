@@ -73,7 +73,7 @@ function startGame() {
         // deal with all the info of game over
         message.innerHTML = "Game over ";
         clearInterval(intervalId);
-        document.getElementById("timer").value = "";
+        document.getElementById("timer").value = "Time: ";
         // Create the summary page
         var summary = document.createElement("div");
         summary.id = "summary";
@@ -127,7 +127,7 @@ function startGame() {
     var remainingTime = gameDuration / 1000;
     intervalId = setInterval(function(){
         remainingTime--;
-        timer.innerHTML = remainingTime;
+        timer.innerHTML = "Time: "+remainingTime;
         if(remainingTime === 0){
             message.innerHTML = "Time's up. The correct word was " + selectedWord;
             roundInfo = {
