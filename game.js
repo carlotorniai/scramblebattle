@@ -50,7 +50,7 @@ fetch('selected_words.txt')
   })
   .catch(err => console.log(`Error: ${err}`));
 
-console.log(selectedWords);
+console.log(wordList);
 
 
 // Scramble a word
