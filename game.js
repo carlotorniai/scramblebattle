@@ -1,10 +1,20 @@
-// Game setup
+/* Game setup
 // TO DO
-// make sure it works with restarting by : setting the score to zero, 
-// the start again and have a function to reinizialize words
-// fix the timer upon strting a raound
-// all the freaking visuals need to change
+Major
+- Expand the vocabulary and have only a set of 5 words (6,7,8,9,10) or
+(5,7,9,11,13) 
+- Have a python script to generate the text file with the 6 words
+- Read the file instad of generating it on the fly 
+- Deal with words with multiple anagrams
+- create the daily ladder and cookie for user stats like high score and highest nu,ber of owrds / time of completion
 
+- See how to deal with the sttic page of recap
+
+Minor
+- make sure it works with restarting by : setting the score to zero, 
+- fix the timer upon starting round
+- all the freaking visuals need to change
+*/
 var score = 0;
 var wordList = [];
 var startTime;
@@ -13,6 +23,7 @@ var gameDuration = 10000; // 20 seconds in milliseconds
 var round = 1;
 var intervalId;
 var rounds = [];
+var correctWords=0;
 
 fetch("./parole.txt")
   .then(response => response.text())
@@ -47,15 +58,45 @@ function startGame() {
     if (round > 10) {
         message.innerHTML = "Game over ";
         clearInterval(intervalId);
-
-        // var replay = prompt("Do you want to replay? Press 'y' for yes, 'n' for no.");
-        // if (replay === 'y') {
-        // round = 1;
-        // score = 0;
-        // startGame();
-        // } else {
-        // message.innerHTML = "Thank you for playing! Your final score is: " + score;
-        // }
+        document.getElementById("timer").value = "";
+        // Create the summary page
+        var summary = document.createElement("div");
+        summary.id = "summary";
+        document.body.appendChild(summary);
+        // Add a title
+        var title = document.createElement("h1");
+        title.innerHTML = "Summary";
+        summary.appendChild(title);
+        // Add a table to display the rounds information
+        var table = document.createElement("table");
+        summary.appendChild(table);
+        // Add table headings
+        var headings = ["Round", "Word", "Answer", "Time", "Points"];
+        var tr = document.createElement("tr");
+        headings.forEach(function(heading) {
+            var th = document.createElement("th");
+            th.innerHTML = heading;
+            tr.appendChild(th);
+        });
+        table.appendChild(tr);
+        // Add the information for each round
+        rounds.forEach(function(round) {
+            var tr = document.createElement("tr");
+            for (var key in round) {
+                var td = document.createElement("td");
+                td.innerHTML = round[key];
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        });
+        // Here I want to display the number of correct words
+        var wordsElem = document.createElement("p");
+        wordsElem.innerHTML = "Correct words: " + correctWords;
+        summary.appendChild(wordsElem);
+        // Display the final score
+        var scoreElem = document.createElement("p");
+        scoreElem.innerHTML = "Final Score: " + score;
+        summary.appendChild(scoreElem);
         return;
     }
 
@@ -125,6 +166,7 @@ function checkAnswer() {
       console.log(score)
       document.getElementById("score").innerHTML = "Score: " + score;
       message.innerHTML = "Correct! You gained " + roundScore + " points.";
+      correctWords+=1;
       roundInfo = {
         word: selectedWord,
         correct: true,
