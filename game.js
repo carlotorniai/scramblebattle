@@ -1,10 +1,21 @@
-// Game setup
+/* Game setup
 // TO DO
-// make sure it works with restarting by : setting the score to zero, 
-// the start again and have a function to reinizialize words
-// fix the timer upon strting a raound
-// all the freaking visuals need to change
+Major
+- Expand the vocabulary and have only a set of 5 words (6,7,8,9,10) or
+(5,7,9,11,13) 
+- Have a python script to generate the text file with the 6 words
+- Read the file instad of generating it on the fly 
+- Deal with words with multiple anagrams
+- create the daily ladder and cookie for user stats like high score and highest nu,ber of owrds / time of completion
 
+
+Minor
+- See how to deal with the sttic page of recap
+
+- make sure it works with restarting by : setting the score to zero, 
+- fix the timer upon starting round
+- all the freaking visuals need to change
+*/
 var score = 0;
 var wordList = [];
 var startTime;
@@ -12,6 +23,8 @@ var selectedWord;
 var gameDuration = 10000; // 20 seconds in milliseconds
 var round = 1;
 var intervalId;
+var rounds = [];
+var correctWords=0;
 
 fetch("./parole.txt")
   .then(response => response.text())
@@ -44,17 +57,48 @@ function scramble(word) {
 function startGame() {
     startTime = new Date();
     if (round > 10) {
+        // deal with all the info of game over
         message.innerHTML = "Game over ";
         clearInterval(intervalId);
-
-        // var replay = prompt("Do you want to replay? Press 'y' for yes, 'n' for no.");
-        // if (replay === 'y') {
-        // round = 1;
-        // score = 0;
-        // startGame();
-        // } else {
-        // message.innerHTML = "Thank you for playing! Your final score is: " + score;
-        // }
+        document.getElementById("timer").value = "";
+        // Create the summary page
+        var summary = document.createElement("div");
+        summary.id = "summary";
+        document.body.appendChild(summary);
+        // Add a title
+        var title = document.createElement("h1");
+        title.innerHTML = "Summary";
+        summary.appendChild(title);
+        // Add a table to display the rounds information
+        var table = document.createElement("table");
+        summary.appendChild(table);
+        // Add table headings
+        var headings = ["Round", "Word", "Answer", "Time", "Points"];
+        var tr = document.createElement("tr");
+        headings.forEach(function(heading) {
+            var th = document.createElement("th");
+            th.innerHTML = heading;
+            tr.appendChild(th);
+        });
+        table.appendChild(tr);
+        // Add the information for each round
+        rounds.forEach(function(round) {
+            var tr = document.createElement("tr");
+            for (var key in round) {
+                var td = document.createElement("td");
+                td.innerHTML = round[key];
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        });
+        // Here I want to display the number of correct words
+        var wordsElem = document.createElement("p");
+        wordsElem.innerHTML = "Correct words: " + correctWords;
+        summary.appendChild(wordsElem);
+        // Display the final score
+        var scoreElem = document.createElement("p");
+        scoreElem.innerHTML = "Final Score: " + score;
+        summary.appendChild(scoreElem);
         return;
     }
 
@@ -73,6 +117,14 @@ function startGame() {
         timer.innerHTML = remainingTime;
         if(remainingTime === 0){
             message.innerHTML = "Time's up. The correct word was " + selectedWord;
+            roundInfo = {
+              word: selectedWord,
+              correct: false,
+              timeTaken: gameDuration,
+              points: 0
+            }
+            rounds.push(roundInfo);
+            console.log(rounds)
             clearInterval(intervalId);
             round++;
             setTimeout(startGame, 2000);
@@ -102,6 +154,8 @@ function startGame() {
     document.getElementById("submit").addEventListener("click", checkAnswer);
 }
 function checkAnswer() {
+    var roundScore = 0;
+    var roundInfo = {};
     var playerInput = document.getElementById("answer").value;
     var message = document.getElementById("message");
     if (playerInput === selectedWord) {
@@ -114,17 +168,31 @@ function checkAnswer() {
       console.log(score)
       document.getElementById("score").innerHTML = "Score: " + score;
       message.innerHTML = "Correct! You gained " + roundScore + " points.";
+      correctWords+=1;
+      roundInfo = {
+        word: selectedWord,
+        correct: true,
+        timeTaken: timeTaken,
+        points: roundScore
+    }
       setTimeout(function(){ 
         round++;
         startGame();
       }, 2000);
     } else {
-        console.log("sono nell Else")
         message.innerHTML = "Incorrect. The correct word was " + selectedWord;
+        roundInfo = {
+          word: selectedWord,
+          correct: false,
+          timeTaken: gameDuration,
+          points: 0
+        }
         clearInterval(intervalId);
         round++;
         setTimeout(startGame, 2000);
     }
+    rounds.push(roundInfo);
+    console.log(rounds)
   }
 
 
