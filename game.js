@@ -12,6 +12,7 @@ var selectedWord;
 var gameDuration = 10000; // 20 seconds in milliseconds
 var round = 1;
 var intervalId;
+var rounds = [];
 
 fetch("./parole.txt")
   .then(response => response.text())
@@ -73,6 +74,14 @@ function startGame() {
         timer.innerHTML = remainingTime;
         if(remainingTime === 0){
             message.innerHTML = "Time's up. The correct word was " + selectedWord;
+            roundInfo = {
+              word: selectedWord,
+              correct: false,
+              timeTaken: gameDuration,
+              points: 0
+            }
+            rounds.push(roundInfo);
+            console.log(rounds)
             clearInterval(intervalId);
             round++;
             setTimeout(startGame, 2000);
@@ -102,6 +111,8 @@ function startGame() {
     document.getElementById("submit").addEventListener("click", checkAnswer);
 }
 function checkAnswer() {
+    var roundScore = 0;
+    var roundInfo = {};
     var playerInput = document.getElementById("answer").value;
     var message = document.getElementById("message");
     if (playerInput === selectedWord) {
@@ -114,16 +125,30 @@ function checkAnswer() {
       console.log(score)
       document.getElementById("score").innerHTML = "Score: " + score;
       message.innerHTML = "Correct! You gained " + roundScore + " points.";
+      roundInfo = {
+        word: selectedWord,
+        correct: true,
+        timeTaken: timeTaken,
+        points: roundScore
+    }
       setTimeout(function(){ 
         round++;
         startGame();
       }, 2000);
     } else {
         message.innerHTML = "Incorrect. The correct word was " + selectedWord;
+        roundInfo = {
+          word: selectedWord,
+          correct: false,
+          timeTaken: gameDuration,
+          points: 0
+        }
         clearInterval(intervalId);
         round++;
         setTimeout(startGame, 2000);
     }
+    rounds.push(roundInfo);
+    console.log(rounds)
   }
 
 
