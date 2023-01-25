@@ -26,21 +26,45 @@ var intervalId;
 var rounds = [];
 var correctWords=0;
 
-fetch("./parole.txt")
+
+// Now I have to substitute this with the javascript 
+
+async function readSelectedWords() {
+  console.log("Reading selected words from file...");
+  try {
+    const response = await fetch('selected_words.txt');
+    const data = await response.text();
+    return data.split(" ");
+  } catch (err) {
+    console.log(`Error: ${err}`);
+  }
+}
+
+fetch('selected_words.txt')
   .then(response => response.text())
   .then(data => {
-    var words = data.split("\n");
-    for(var i = 5; i<=15; i++){
-      var filteredWords = words.filter(word => word.length === i);
-      var selectedWord = filteredWords[Math.floor(Math.random() * filteredWords.length)];
-      wordList.push(selectedWord);
-      if (wordList.length === 10) {
-        break;
-      }
-    }
+    wordList = data.split(" ");
+    console.log(wordList);
     startGame();
   })
-  .catch(error => console.log(error));
+  .catch(err => console.log(`Error: ${err}`));
+
+console.log(selectedWords);
+// fetch("./parole.txt")
+//   .then(response => response.text())
+//   .then(data => {
+//     var words = data.split("\n");
+//     for(var i = 5; i<=15; i++){
+//       var filteredWords = words.filter(word => word.length === i);
+//       var selectedWord = filteredWords[Math.floor(Math.random() * filteredWords.length)];
+//       wordList.push(selectedWord);
+//       if (wordList.length === 10) {
+//         break;
+//       }
+//     }
+//     startGame();
+//   })
+//   .catch(error => console.log(error));
 
 // Scramble a word
 function scramble(word) {
@@ -54,9 +78,11 @@ function scramble(word) {
     return scrambledWord;
 }
 
+startGame();
+
 function startGame() {
     startTime = new Date();
-    if (round > 10) {
+    if (round > 5) {
         // deal with all the info of game over
         message.innerHTML = "Game over ";
         clearInterval(intervalId);
