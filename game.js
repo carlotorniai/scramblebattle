@@ -5,7 +5,6 @@
 // fix the timer upon strting a raound
 // all the freaking visuals need to change
 
-var rounds = [];
 var score = 0;
 var wordList = [];
 var startTime;
@@ -47,6 +46,15 @@ function startGame() {
     if (round > 10) {
         message.innerHTML = "Game over ";
         clearInterval(intervalId);
+
+        // var replay = prompt("Do you want to replay? Press 'y' for yes, 'n' for no.");
+        // if (replay === 'y') {
+        // round = 1;
+        // score = 0;
+        // startGame();
+        // } else {
+        // message.innerHTML = "Thank you for playing! Your final score is: " + score;
+        // }
         return;
     }
 
@@ -94,8 +102,6 @@ function startGame() {
     document.getElementById("submit").addEventListener("click", checkAnswer);
 }
 function checkAnswer() {
-    var roundScore = 0;
-    var roundInfo = {}; 
     var playerInput = document.getElementById("answer").value;
     var message = document.getElementById("message");
     if (playerInput === selectedWord) {
@@ -108,13 +114,6 @@ function checkAnswer() {
       console.log(score)
       document.getElementById("score").innerHTML = "Score: " + score;
       message.innerHTML = "Correct! You gained " + roundScore + " points.";
-      // store into in rounds
-      roundInfo = {
-        word: selectedWord,
-        correct: true,
-        timeTaken: timeTaken,
-        points: roundScore
-    }
       setTimeout(function(){ 
         round++;
         startGame();
@@ -122,18 +121,10 @@ function checkAnswer() {
     } else {
         console.log("sono nell Else")
         message.innerHTML = "Incorrect. The correct word was " + selectedWord;
-        roundInfo = {
-        word: selectedWord,
-        correct: false,
-        timeTaken: gameDuration,
-        points: 0
-      }
         clearInterval(intervalId);
         round++;
         setTimeout(startGame, 2000);
     }
-    rounds.push(roundInfo);
-    console.log(rounds)
   }
 
 
