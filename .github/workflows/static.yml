@@ -26,7 +26,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Run the script
-      run: python scripts/create_daily_words.py
+      run: python ../scripts/create_daily_words.py
     - name: Setup Pages
       uses: actions/configure-pages@v3
     - name: Upload artifact
