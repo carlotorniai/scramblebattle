@@ -41,7 +41,7 @@ def main():
                 if i % 100 == 0:
                     print("Processed {} words".format(i))
         # write the dictionary to a json file
-        with open("anagrams.json", "w") as f:
+        with open("../anagrams.json", "w") as f:
             json.dump(anagrams_dict, f, indent=4)
     except FileNotFoundError:
         print("all_words.txt file not found.")
