@@ -54,7 +54,7 @@ jobs:
       run: |
         git commit -m "Add selected_words.txt"
     - name: Push to main branch
-      uses: actions/git-client@v4
+      uses: actions/git-client@v3
       with:
         args: push
   
