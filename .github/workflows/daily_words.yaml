@@ -23,4 +23,4 @@ jobs:
         pip install -r requirements.txt
     
     - name: Run the script
-      run: python ./scripts/create_daily_words.py
+      run: python ../scripts/create_daily_words.py
