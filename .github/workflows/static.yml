@@ -37,10 +37,9 @@ jobs:
       id: deployment
       uses: actions/deploy-pages@v1
     - name: Add selected_words.txt
-      uses: actions/github-script@v3
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: actions/add-path@v2
       with:
+        path: scripts/selected_words.txt
         script: |
           git add scripts/selected_words.txt
           git commit -m "Add selected_words.txt"
