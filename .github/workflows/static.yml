@@ -36,19 +36,13 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v1
-    - name: Checkout main branch
-      uses: actions/checkout@v3
-      with:
-        ref: main
     - name: Add selected_words.txt
-      run: git add scripts/selected_words.txt
-    - name: Commit
-      run: |
-        git config --local user.email "carlotorniai@gmail.com"
-        git config --local user.name "Caro Torniai"
-        git commit -m "Add selected_words.txt"
-    - name: Push to main branch
-      uses: actions/git-client@v4
+      uses: actions/github-script@v3
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        args: push
+        script: |
+          git add scripts/selected_words.txt
+          git commit -m "Add selected_words.txt"
+          git push
   
