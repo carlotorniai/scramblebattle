@@ -1,12 +1,8 @@
 /* Game setup
 // TO DO
 Major
-- Expand the vocabulary and have only a set of 5 words (6,7,8,9,10) or
-(5,7,9,11,13) 
-- Have a python script to generate the text file with the 6 words
-- Read the file instad of generating it on the fly 
 - Deal with words with multiple anagrams
-- create the daily ladder and cookie for user stats like high score and highest nu,ber of owrds / time of completion
+- Create the daily leaderboards and cookie for user stats like high score and highest number of owrds / time of completion
 
 
 Minor
