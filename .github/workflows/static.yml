@@ -50,7 +50,7 @@ jobs:
         ref: main
     - name: Add selected_words.txt
       run: |
-          git add scripts/selected_words.txt
+          git add selected_words.txt
           git config --local user.email "carlotorniai@gmail.com"
           git config --local user.name "Caro Torniai"
           git commit -m "Add selected_words.txt"
