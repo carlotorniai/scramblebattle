@@ -62,7 +62,31 @@ function scramble(word) {
 }
 
 
-// sdd the event listener to the answer 
+// Here adding the event listeenr to the keyboard
+const keyboard = document.querySelector("#keyboard");
+const answerInput = document.querySelector("#answer");
+
+keyboard.addEventListener("click", function(event) {
+  if (event.target.classList.contains("key")) {
+    const key = event.target.innerText;
+    if (key === "Send") {
+      // Send the answer
+    } else if (key === "&larr;") {
+      // Remove the last character from the answer
+      answerInput.value = answerInput.value.slice(0, -1);
+    } else if (key === "&nbsp;") {
+      // Add a space to the answer
+      answerInput.value += " ";
+    } else {
+      // Add the key to the answer
+      answerInput.value += key;
+    }
+  }
+});
+
+// End event listener for keyboard // 
+
+// add the event listener to the answer 
 document.getElementById("answer").addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
