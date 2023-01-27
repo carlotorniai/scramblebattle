@@ -1,16 +1,16 @@
 /* Game setup
 // TO DO
 Major
+- Add event listner correctly to the keyboard
+- Adjust the whole layout for the 
 - Deal with words with multiple anagrams
 - Create the daily leaderboards and cookie for user stats like high score and highest number of owrds / time of completion
 
 
 Minor
 - See how to deal with the sttic page of recap
-
 - make sure it works with restarting by : setting the score to zero, 
-- fix the timer upon starting round
-- all the freaking visuals need to change
+
 */
 var score = 0;
 var wordList = [];
@@ -62,30 +62,10 @@ function scramble(word) {
 }
 
 
-// Here adding the event listeenr to the keyboard
-const keyboard = document.querySelector("#keyboard");
-const answerInput = document.querySelector("#answer");
-
-keyboard.addEventListener("click", function(event) {
-  if (event.target.classList.contains("key")) {
-    const key = event.target.innerText;
-    if (key === "Send") {
-      // Send the answer
-    } else if (key === "&larr;") {
-      // Remove the last character from the answer
-      answerInput.value = answerInput.value.slice(0, -1);
-    } else if (key === "&nbsp;") {
-      // Add a space to the answer
-      answerInput.value += " ";
-    } else {
-      // Add the key to the answer
-      answerInput.value += key;
-    }
-  }
-});
-
 // End event listener for keyboard // 
 
+
+// Check ig this one below is needed ???
 // add the event listener to the answer 
 document.getElementById("answer").addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
@@ -98,6 +78,33 @@ startGame();
 
 function startGame() {
     startTime = new Date();
+
+    // Keyboard section 
+    // Here adding the event listeenr to the keyboard
+    const keyboard = document.getElementById("keyboard");
+    const answerInput = document.getElementById("answer");
+
+    keyboard.addEventListener("click", function(event) {
+      console.log ("pressInside event listener keybaord");
+      if (event.target.classList.contains("key")) {
+        const key = event.target.innerText;
+        if (key === "Send") {
+          // Send the answer
+          // Here need to call checkAnswer 
+        } else if (key === "&larr;") {
+          // Remove the last character from the answer
+          answerInput.value = answerInput.value.slice(0, -1);
+        } else if (key === "&nbsp;") {
+          // Add a space to the answer
+          answerInput.value += " ";
+        } else {
+          // Add the key to the answer
+          console.log ("pressed "+ key);
+          answerInput.value += key;
+        }
+      }
+    });
+
     if (round > 5) {
         // deal with all the info of game over
         message.innerHTML = "Game over ";
@@ -191,11 +198,11 @@ function startGame() {
     // clear the input 
     document.getElementById("answer").value = "";
  
-
     // check the answer
     document.getElementById("submit").removeEventListener("click", checkAnswer);
     document.getElementById("submit").addEventListener("click", checkAnswer);
 }
+
 function checkAnswer() {
     var roundScore = 0;
     var roundInfo = {};
