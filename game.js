@@ -1,16 +1,16 @@
 /* Game setup
 // TO DO
 Major
+- Adjust the whole layout for the mobile wordle like.
 - Deal with words with multiple anagrams
 - Create the daily leaderboards and cookie for user stats like high score and highest number of owrds / time of completion
 
-
 Minor
 - See how to deal with the sttic page of recap
-
 - make sure it works with restarting by : setting the score to zero, 
-- fix the timer upon starting round
-- all the freaking visuals need to change
+- Disable typing in the two seconds between rounds 
+
+
 */
 var score = 0;
 var wordList = [];
@@ -24,7 +24,7 @@ var correctWords=0;
 
 
 // Now I have to substitute this with the javascript 
-
+// This code below isnìt needed anymore
 async function readSelectedWords() {
   console.log("Reading selected words from file...");
   try {
@@ -36,11 +36,36 @@ async function readSelectedWords() {
   }
 }
 
+// Keybaord
+
+ // Keybaord section
+ const keyboard = document.querySelector(".keyboard");
+ const answerInput = document.querySelector("#answer");
+
+ keyboard.addEventListener("click", function(event) {
+   if (event.target.classList.contains("key")) {
+     const key = event.target.textContent;
+     if (key === "Send") {
+       // Send the answer
+       checkAnswer();
+       // Here I need to trigger 
+     } else if (key === "Canc") {
+       // Remove the last character from the answer
+       answerInput.value = answerInput.value.slice(0, -1);
+     } else {
+       // Add the key to the answer
+       answerInput.value += key;
+     }
+   }
+ });
 // Fetch the words of the day
+// Thrasform with map in UPPER CASE to match input
+
 fetch('selected_words.txt')
   .then(response => response.text())
   .then(data => {
     wordList = data.split(" ");
+    wordList = wordList.map(word => word.toUpperCase());
     console.log(wordList);
     startGame();
   })
@@ -62,7 +87,11 @@ function scramble(word) {
 }
 
 
-// sdd the event listener to the answer 
+// End event listener for keyboard // 
+
+
+// Check ig this one below is needed ???
+// add the event listener to the answer 
 document.getElementById("answer").addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     event.preventDefault();
@@ -167,11 +196,13 @@ function startGame() {
     // clear the input 
     document.getElementById("answer").value = "";
  
-
     // check the answer
     document.getElementById("submit").removeEventListener("click", checkAnswer);
     document.getElementById("submit").addEventListener("click", checkAnswer);
+
+    
 }
+
 function checkAnswer() {
     var roundScore = 0;
     var roundInfo = {};
