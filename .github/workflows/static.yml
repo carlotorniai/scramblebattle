@@ -1,0 +1,42 @@
+on:
+  schedule:
+    - cron:  '30 18 * * *' #run every day at 18:30 (GMT+1)
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Run the script
+      run: python scripts/create_daily_words.py
+    - name: Add selected_words.txt
+      run: |
+          git add selected_words.txt
+          git config --local user.email "carlotorniai@gmail.com"
+          git config --local user.name "Caro Torniai"
+          git commit -m "Add selected_words.txt"
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
+      with:
+        path: '.'
+    - name: Push to main branch
+      run: git push
