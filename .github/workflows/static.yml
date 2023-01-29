@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: '30 18 * * *'
+    - cron:  '30 18 * * *' #run every day at 18:30 (GMT+1)
   push:
     branches: ["main"]
   workflow_dispatch:
@@ -25,20 +25,18 @@ jobs:
       uses: actions/checkout@v3
     - name: Run the script
       run: python scripts/create_daily_words.py
-    - name: Setup Pages
-      uses: actions/configure-pages@v3
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
-      with:
-        path: selected_words.txt
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v1
     - name: Add selected_words.txt
       run: |
           git add selected_words.txt
           git config --local user.email "carlotorniai@gmail.com"
           git config --local user.name "Caro Torniai"
           git commit -m "Add selected_words.txt"
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
+      with:
+        path: '.'
     - name: Push to main branch
       run: git push
