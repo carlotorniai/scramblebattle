@@ -1,8 +1,6 @@
-name: Deploy static content to Pages
-
 on:
   schedule:
-    - cron:  '30 18 * * *' #run every day at 18:30 (GMT+1)
+    - cron: '30 18 * * *'
   push:
     branches: ["main"]
   workflow_dispatch:
@@ -32,22 +30,10 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
-        path: '.'
+        path: selected_words.txt
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v1
-    - name: Checkout main branch
-      uses: actions/checkout@v2
-      with:
-        ref: main
-    - name: Checkout main branch
-      uses: actions/checkout@v3
-      with:
-        ref: main
-    - name: Checkout main branch
-      uses: actions/checkout@v3
-      with:
-        ref: main
     - name: Add selected_words.txt
       run: |
           git add selected_words.txt
@@ -56,4 +42,3 @@ jobs:
           git commit -m "Add selected_words.txt"
     - name: Push to main branch
       run: git push
-  
