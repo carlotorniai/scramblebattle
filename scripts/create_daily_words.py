@@ -20,10 +20,10 @@ for length in word_lengths:
 print("Writing selected words to file...")
 try:
     # Write the selected words to a new file
-    with open('../selected_words.txt', 'w') as f:
+    with open('selected_words.txt', 'w') as f:
         f.write(' '.join(selected_words))
 except:
     print("An error occurred while writing to file.")
     exit()
 
-print("Script executed successfully.")
+print("Script executed successfully. The words are: " +str(selected_words))
