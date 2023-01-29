@@ -1,15 +1,15 @@
 /* Game setup
 // TO DO
 Major
-- Add event listner correctly to the keyboard
-- Adjust the whole layout for the 
+- Adjust the whole layout for the mobile wordle like.
 - Deal with words with multiple anagrams
 - Create the daily leaderboards and cookie for user stats like high score and highest number of owrds / time of completion
-
 
 Minor
 - See how to deal with the sttic page of recap
 - make sure it works with restarting by : setting the score to zero, 
+- Disable typing in the two seconds between rounds 
+
 
 */
 var score = 0;
@@ -24,7 +24,7 @@ var correctWords=0;
 
 
 // Now I have to substitute this with the javascript 
-
+// This code below isnìt needed anymore
 async function readSelectedWords() {
   console.log("Reading selected words from file...");
   try {
@@ -36,11 +36,36 @@ async function readSelectedWords() {
   }
 }
 
+// Keybaord
+
+ // Keybaord section
+ const keyboard = document.querySelector(".keyboard");
+ const answerInput = document.querySelector("#answer");
+
+ keyboard.addEventListener("click", function(event) {
+   if (event.target.classList.contains("key")) {
+     const key = event.target.textContent;
+     if (key === "Send") {
+       // Send the answer
+       checkAnswer();
+       // Here I need to trigger 
+     } else if (key === "Canc") {
+       // Remove the last character from the answer
+       answerInput.value = answerInput.value.slice(0, -1);
+     } else {
+       // Add the key to the answer
+       answerInput.value += key;
+     }
+   }
+ });
 // Fetch the words of the day
+// Thrasform with map in UPPER CASE to match input
+
 fetch('selected_words.txt')
   .then(response => response.text())
   .then(data => {
     wordList = data.split(" ");
+    wordList = wordList.map(word => word.toUpperCase());
     console.log(wordList);
     startGame();
   })
@@ -78,33 +103,6 @@ startGame();
 
 function startGame() {
     startTime = new Date();
-
-    // Keyboard section 
-    // Here adding the event listeenr to the keyboard
-    const keyboard = document.getElementById("keyboard");
-    const answerInput = document.getElementById("answer");
-
-    keyboard.addEventListener("click", function(event) {
-      console.log ("pressInside event listener keybaord");
-      if (event.target.classList.contains("key")) {
-        const key = event.target.innerText;
-        if (key === "Send") {
-          // Send the answer
-          // Here need to call checkAnswer 
-        } else if (key === "&larr;") {
-          // Remove the last character from the answer
-          answerInput.value = answerInput.value.slice(0, -1);
-        } else if (key === "&nbsp;") {
-          // Add a space to the answer
-          answerInput.value += " ";
-        } else {
-          // Add the key to the answer
-          console.log ("pressed "+ key);
-          answerInput.value += key;
-        }
-      }
-    });
-
     if (round > 5) {
         // deal with all the info of game over
         message.innerHTML = "Game over ";
@@ -201,6 +199,8 @@ function startGame() {
     // check the answer
     document.getElementById("submit").removeEventListener("click", checkAnswer);
     document.getElementById("submit").addEventListener("click", checkAnswer);
+
+    
 }
 
 function checkAnswer() {
