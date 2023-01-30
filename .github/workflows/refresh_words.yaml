@@ -1,4 +1,4 @@
-name: refresh ords
+name: refresh words
 
 on:
   schedule:
