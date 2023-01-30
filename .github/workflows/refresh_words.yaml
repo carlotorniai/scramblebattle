@@ -17,7 +17,7 @@ jobs:
       - name: execute py script
         uses: actions/checkout@v3
         run: |
-          python main.py
+          python ../scripts/create_daily_words.py
           git config user.name Carlo Torniai
           git config user.email carlotorniai@gmail.com
           git add .
