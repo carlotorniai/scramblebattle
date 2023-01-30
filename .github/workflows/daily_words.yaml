@@ -1,4 +1,4 @@
-name: DailY Words
+name: Update Daily Words
 
 on:
   schedule:
