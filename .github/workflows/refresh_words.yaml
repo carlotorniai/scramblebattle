@@ -22,4 +22,8 @@ jobs:
           git config user.email carlotorniai@gmail.com
           git add .
           git commit -m "generated words"
-          git push
+      - name: push changes
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main  
