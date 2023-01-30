@@ -2,26 +2,40 @@ name: refresh ords
 
 on:
   schedule:
-    - cron: "30 11 * * *"    #runs at 11:30 UTC everyday
+    - cron: '0 12 * * *' # runs at 12:00 UTC everyday
 
 jobs:
-  getdataandrefreshmap:
+  build:
     runs-on: ubuntu-latest
     steps:
+
       - name: checkout repo content
-        uses: actions/checkout@v3 # checkout the repository content to github runner.
+        uses: actions/checkout@v2 # checkout the repository content to github runner
+
       - name: setup python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8 #install the python needed
-      - name: execute py script
-        uses: actions/checkout@v3
+          python-version: '3.7.7' # install the python version needed
+          
+      - name: install python packages
         run: |
-          python ../scripts/create_daily_words.py
-          git config user.name Carlo Torniai
-          git config user.email carlotorniai@gmail.com
-          git add .
-          git commit -m "generated words"
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: execute py script # run sj-gobierno.py to get the latest data
+        env: 
+          EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          EMAIL_RECIPIENT: ${{ secrets.EMAIL_RECIPIENT }}
+        run: python ../scripts/create_daily_words.py
+          
+      - name: commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git commit -m "update data" -a
+          
       - name: push changes
         uses: ad-m/github-push-action@v0.6.0
         with:
