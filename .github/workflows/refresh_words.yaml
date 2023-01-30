@@ -16,7 +16,7 @@ jobs:
           python-version: 3.8 #install the python needed
       - name: execute py script
         uses: actions/checkout@v3
-        run: | 
+        run: |
           python ../scripts/create_daily_words.py
           git config user.name Carlo Torniai
           git config user.email carlotorniai@gmail.com
