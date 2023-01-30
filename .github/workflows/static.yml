@@ -27,9 +27,9 @@ jobs:
       run: python scripts/create_daily_words.py
     - name: Add selected_words.txt
       run: |
-          git add selected_words.txt
           git config --local user.email "carlotorniai@gmail.com"
           git config --local user.name "Caro Torniai"
+          git add selected_words.txt
           git commit -m "Add selected_words.txt"
     - name: Setup Pages
       uses: actions/configure-pages@v3
