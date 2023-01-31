@@ -1,6 +1,7 @@
 /* Game setup
 // TO DO
 Major
+- Nedd playrs to be presented with the same scramble so need to generate serverside with the script the scramble and write it to a file
 - Adjust the whole layout for the mobile wordle like.
 - Deal with words with multiple anagrams
 - Create the daily leaderboards and cookie for user stats like high score and highest number of owrds / time of completion
@@ -22,19 +23,39 @@ var intervalId;
 var rounds = [];
 var correctWords=0;
 
+var server = true;
+
+function initializeWords() {
+    fetch("./parole.txt")
+      .then(response => response.text())
+      .then(data => {
+        var words = data.split("\n");
+        for(var i = 5; i<=10; i++){
+          var filteredWords = words.filter(word => word.length === i);
+          var selectedWord = filteredWords[Math.floor(Math.random() * filteredWords.length)];
+          wordList.push(selectedWord);
+          if (wordList.length === 5) {
+            console.log("End of reading and constructing words")
+            break;
+          }
+        }
+      })
+      .catch(error => console.log(error));
+
+  }
+
 
 // Now I have to substitute this with the javascript 
-// This code below isnìt needed anymore
-async function readSelectedWords() {
-  console.log("Reading selected words from file...");
-  try {
-    const response = await fetch('selected_words.txt');
-    const data = await response.text();
-    return data.split(" ");
-  } catch (err) {
-    console.log(`Error: ${err}`);
-  }
-}
+// async function readSelectedWords() {
+//   console.log("Reading selected words from file...");
+//   try {
+//     const response = await fetch('selected_words.txt');
+//     const data = await response.text();
+//     return data.split(" ");
+//   } catch (err) {
+//     console.log(`Error: ${err}`);
+//   }
+// }
 
 // Keybaord
 
@@ -61,17 +82,26 @@ async function readSelectedWords() {
 // Fetch the words of the day
 // Thrasform with map in UPPER CASE to match input
 
-fetch('selected_words.txt')
-  .then(response => response.text())
-  .then(data => {
-    wordList = data.split(" ");
-    wordList = wordList.map(word => word.toUpperCase());
-    console.log(wordList);
-    startGame();
-  })
-  .catch(err => console.log(`Error: ${err}`));
+// here add the choice of server side or not
 
-console.log(wordList);
+if (server==true) {
+    fetch('selected_words.txt')
+      .then(response => response.text())
+      .then(data => {
+        wordList = data.split(" ");
+        wordList = wordList.map(word => word.toUpperCase());
+        console.log(wordList);
+        startGame();
+      })
+      .catch(err => console.log(`Error: ${err}`));
+    }
+else {
+  console.log("No server local game")
+  initializeWords();
+  console.log(wordList);
+  startGame();
+}
+
 
 
 // Scramble a word
@@ -150,8 +180,8 @@ function startGame() {
     }
 
     // update round and word length
-    document.getElementById("round").innerHTML = "Round " + round;
-    document.getElementById("word-length").innerHTML = "Word Length: " + wordList[round-1].length;
+    document.getElementById("round").innerHTML ="Round: "+ round;
+    // document.getElementById("word-length").innerHTML = "Word Length: " + wordList[round-1].length;
     selectedWord = wordList[round-1];
     console.log(selectedWord)
     var scrambleWord = scramble(selectedWord);
@@ -197,8 +227,8 @@ function startGame() {
     document.getElementById("answer").value = "";
  
     // check the answer
-    document.getElementById("submit").removeEventListener("click", checkAnswer);
-    document.getElementById("submit").addEventListener("click", checkAnswer);
+    // document.getElementById("submit").removeEventListener("click", checkAnswer);
+    // document.getElementById("submit").addEventListener("click", checkAnswer);
 
     
 }
@@ -254,7 +284,7 @@ function checkAnswer() {
 //       .then(response => response.text())
 //       .then(data => {
 //         var words = data.split("\n");
-//         for(var i = 5; i<=15; i++){
+//         for(var i = 5; i<=10; i++){
 //           var filteredWords = words.filter(word => word.length === i);
 //           var selectedWord = filteredWords[Math.floor(Math.random() * filteredWords.length)];
 //           wordList.push(selectedWord);
