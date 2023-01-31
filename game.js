@@ -15,8 +15,10 @@ Minor
 */
 var score = 0;
 var wordList = [];
+var scrambleList = [];
 var startTime;
 var selectedWord;
+var scrambledWord;
 var gameDuration = 20000; // 20 seconds in milliseconds
 var round = 1;
 var intervalId;
@@ -44,21 +46,6 @@ function initializeWords() {
 
   }
 
-
-// Now I have to substitute this with the javascript 
-// async function readSelectedWords() {
-//   console.log("Reading selected words from file...");
-//   try {
-//     const response = await fetch('selected_words.txt');
-//     const data = await response.text();
-//     return data.split(" ");
-//   } catch (err) {
-//     console.log(`Error: ${err}`);
-//   }
-// }
-
-// Keybaord
-
  // Keybaord section
  const keyboard = document.querySelector(".keyboard");
  const answerInput = document.querySelector("#answer");
@@ -80,56 +67,50 @@ function initializeWords() {
    }
  });
 // Fetch the words of the day
-// Thrasform with map in UPPER CASE to match input
+// fetch('selected_words.txt')
+//     .then(response => response.text())
+//     .then(data => {
+//       wordList = data.split(" ");
+//       wordList = wordList.map(word => word.toUpperCase());
+//       console.log(wordList);
+//       //here I can a
+//     })
+//     .catch(err => console.log(`Error: ${err}`));
+  
 
-// here add the choice of server side or not
+// fetch('scrambled_words.txt')
+//     .then(response => response.text())
+//     .then(data => {
+//       scrambleList = data.split(" ");
+//       scrambleList = scrambleList.map(word => word.toUpperCase());
+//       console.log(" Executed fetch of scramble:" +scrambleList);
+//       //startGame();
+//     })
+//     .catch(err => console.log(`Error: ${err}`));
 
-if (server==true) {
-    fetch('selected_words.txt')
-      .then(response => response.text())
-      .then(data => {
-        wordList = data.split(" ");
-        wordList = wordList.map(word => word.toUpperCase());
-        console.log(wordList);
-        startGame();
-      })
-      .catch(err => console.log(`Error: ${err}`));
-    }
-else {
-  console.log("No server local game")
-  initializeWords();
-  console.log(wordList);
+// startGame();
+
+Promise.all([
+  fetch('selected_words.txt')
+    .then(response => response.text())
+    .then(data => {
+      wordList = data.split(" ");
+      wordList = wordList.map(word => word.toUpperCase());
+      console.log(wordList);
+    }),
+  fetch('scrambled_words.txt')
+    .then(response => response.text())
+    .then(data => {
+      scrambleList = data.split(" ");
+      scrambleList = scrambleList.map(word => word.toUpperCase());
+      console.log("Executed fetch of scramble: " + scrambleList);
+    })
+]).then(([words, scrambles]) => {
+  // do something with words and scrambles
   startGame();
-}
+}).catch(err => console.log(`Error: ${err}`));
 
 
-
-// Scramble a word
-function scramble(word) {
-    var scrambledWord = "";
-    var letters = word.split("");
-    while (letters.length > 0) {
-        var randomIndex = Math.floor(Math.random() * letters.length);
-        scrambledWord += letters[randomIndex];
-        letters.splice(randomIndex, 1);
-    }
-    return scrambledWord;
-}
-
-
-// End event listener for keyboard // 
-
-
-// Check ig this one below is needed ???
-// add the event listener to the answer 
-document.getElementById("answer").addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    document.getElementById("submit").click();
-  }
-});
-
-startGame();
 
 function startGame() {
     startTime = new Date();
@@ -184,8 +165,9 @@ function startGame() {
     // document.getElementById("word-length").innerHTML = "Word Length: " + wordList[round-1].length;
     selectedWord = wordList[round-1];
     console.log(selectedWord)
-    var scrambleWord = scramble(selectedWord);
-    console.log(scrambleWord)
+    // var scrambleWord = scramble(selectedWord);
+    scrambledWord = scrambleList[round-1];
+    console.log(scrambledWord)
     // create a timer
     var timer = document.getElementById("timer");
     var remainingTime = gameDuration / 1000;
@@ -212,7 +194,7 @@ function startGame() {
     var word = document.getElementById("word");
     word.innerHTML = "";
 
-    var letters = scrambleWord.split('');
+    var letters = scrambledWord.split('');
     letters.forEach(function(letter){
         var letterElem = document.createElement('span');
         letterElem.innerText = letter;
@@ -226,11 +208,6 @@ function startGame() {
     // clear the input 
     document.getElementById("answer").value = "";
  
-    // check the answer
-    // document.getElementById("submit").removeEventListener("click", checkAnswer);
-    // document.getElementById("submit").addEventListener("click", checkAnswer);
-
-    
 }
 
 function checkAnswer() {
@@ -275,38 +252,3 @@ function checkAnswer() {
     console.log(rounds)
   }
 
-
-  // Suggestions for using a initializeWords function
-
-//   function initializeWords() {
-//     wordList = [];
-//     fetch("./parole.txt")
-//       .then(response => response.text())
-//       .then(data => {
-//         var words = data.split("\n");
-//         for(var i = 5; i<=10; i++){
-//           var filteredWords = words.filter(word => word.length === i);
-//           var selectedWord = filteredWords[Math.floor(Math.random() * filteredWords.length)];
-//           wordList.push(selectedWord);
-//           if (wordList.length === 10) {
-//             break;
-//           }
-//         }
-//       })
-//       .catch(error => console.log(error));
-//   }
-  
-//   function startGame() {
-//     ...
-//     initializeWords();
-//     ...
-//   }
-  
-//   if (replay === 'y') {
-//     round = 1;
-//     score = 0;
-//     initializeWords();
-//     startGame();
-//   } else {
-//     message.innerHTML = "Thank you for playing! Your final score is: " + score;
-//   }

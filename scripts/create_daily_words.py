@@ -32,7 +32,7 @@ for length in word_lengths:
 # Write the selected words to a new file
 print("Writing selected words to file...")
 try:
-    with open('selected_words.txt', 'w') as f:
+    with open('../selected_words.txt', 'w') as f:
         f.write(' '.join(selected_words))
 except:
     print("An error occurred while writing selected_words to file.")
@@ -45,7 +45,7 @@ for word in selected_words:
 # Write the selected words to a new file
 print("Writing scrambled words to file...")
 try:
-    with open('scrambled_words.txt', 'w') as f:
+    with open('../scrambled_words.txt', 'w') as f:
         f.write(' '.join(scrambled_words))
 except:
     print("An error occurred while writing scrambled_words to file.")
