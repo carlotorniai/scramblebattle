@@ -5,15 +5,36 @@ word_lengths = [5, 6, 7, 8, 9]
 scrambled_words = []
 
 # Define the scramble function 
-def scramble(word):
-    scrambled_word = ""
-    letters = list(word)
-    while len(letters) > 0:
-        random_index = random.randint(0, len(letters) - 1)
-        scrambled_word += letters[random_index]
-        letters.pop(random_index)
-    return scrambled_word
+#def scramble(word):
+#    scrambled_word = ""
+#    letters = list(word)
+#    while len(letters) > 0:
+#        random_index = random.randint(0, len(letters) - 1)
+#        scrambled_word += letters[random_index]
+#        letters.pop(random_index)
+#    return scrambled_word
 
+def scramble(word):
+    syllables = []
+    syllable = ""
+    for letter in word:
+        if letter in "aeiouAEIOU":
+            if syllable:
+                syllables.append(syllable)
+                syllable = ""
+            syllables.append(letter)
+        else:
+            syllable += letter
+    if syllable:
+        syllables.append(syllable)
+
+    fixed_syllable_index = random.randint(0, len(syllables) - 1)
+    fixed_syllable = syllables.pop(fixed_syllable_index)
+
+    random.shuffle(syllables)
+    scrambled_syllables = [fixed_syllable] + syllables
+    random.shuffle(scrambled_syllables)
+    return "".join("".join(syllable) for syllable in scrambled_syllables)
 
 
 print("Reading words from file...")
