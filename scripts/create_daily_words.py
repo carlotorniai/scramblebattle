@@ -4,6 +4,7 @@ selected_words = []
 # Define the fixed length of the 5 words
 word_lengths = [5, 6, 7, 8, 9]
 scrambled_words = []
+alternative_scramble = dict()
 
 # Define the scramble function 
 #def scramble(word):
@@ -35,8 +36,12 @@ def scramble(word):
     random.shuffle(syllables)
     scrambled_syllables = [fixed_syllable] + syllables
     random.shuffle(scrambled_syllables)
-    return "".join("".join(syllable) for syllable in scrambled_syllables)
-
+    scrambled_generated = "".join("".join(syllable) for syllable in scrambled_syllables)
+    if scrambled_generated == word:
+            print ("Same word !! Rerunning scramble")
+            return scramble(word)
+    else:
+        return  scrambled_generated
 
 print("Reading words from file...")
 try:
@@ -63,6 +68,7 @@ except:
 # Now I need also to build the scramble vector of words to be unique
 for word in selected_words:
     scrambled_words.append(scramble(word))
+
 
 # Write the selected words to a new file
 print("Writing scrambled words to file...")
