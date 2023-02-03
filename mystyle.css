@@ -26,6 +26,15 @@
     display:flex;
     justify-content: center;
   }
+
+
+   #summary {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 40px;
+    justify-content: center;
+  }
   
   input[type="text"] {
     padding: 5px;
