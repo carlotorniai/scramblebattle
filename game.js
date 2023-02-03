@@ -110,7 +110,46 @@ Promise.all([
   startGame();
 }).catch(err => console.log(`Error: ${err}`));
 
-
+// function to create the summary page
+function createSummaryPage() {
+  var summary = document.createElement("div");
+  
+  var title = document.createElement("h1");
+  title.innerHTML = "Summary";
+  summary.appendChild(title);
+  
+  var table = document.createElement("table");
+  summary.appendChild(table);
+  
+  var headings = ["Round", "Word", "Answer", "Time", "Points"];
+  var tr = document.createElement("tr");
+  headings.forEach(function(heading) {
+  var th = document.createElement("th");
+  th.innerHTML = heading;
+  tr.appendChild(th);
+  });
+  table.appendChild(tr);
+  
+  rounds.forEach(function(round) {
+  var tr = document.createElement("tr");
+  for (var key in round) {
+  var td = document.createElement("td");
+  td.innerHTML = round[key];
+  tr.appendChild(td);
+  }
+  table.appendChild(tr);
+  });
+  
+  var wordsElem = document.createElement("p");
+  wordsElem.innerHTML = "Correct words: " + correctWords;
+  summary.appendChild(wordsElem);
+  
+  var scoreElem = document.createElement("p");
+  scoreElem.innerHTML = "Final Score: " + score;
+  summary.appendChild(scoreElem);
+  
+  document.getElementById("summary").appendChild(summary);
+  }
 
 function startGame() {
     startTime = new Date();
@@ -120,43 +159,7 @@ function startGame() {
         clearInterval(intervalId);
         document.getElementById("timer").value = "Time: ";
         // Create the summary page
-        var summary = document.createElement("div");
-        summary.id = "summary";
-        document.body.appendChild(summary);
-        // Add a title
-        var title = document.createElement("h1");
-        title.innerHTML = "Summary";
-        summary.appendChild(title);
-        // Add a table to display the rounds information
-        var table = document.createElement("table");
-        summary.appendChild(table);
-        // Add table headings
-        var headings = ["Round", "Word", "Answer", "Time", "Points"];
-        var tr = document.createElement("tr");
-        headings.forEach(function(heading) {
-            var th = document.createElement("th");
-            th.innerHTML = heading;
-            tr.appendChild(th);
-        });
-        table.appendChild(tr);
-        // Add the information for each round
-        rounds.forEach(function(round) {
-            var tr = document.createElement("tr");
-            for (var key in round) {
-                var td = document.createElement("td");
-                td.innerHTML = round[key];
-                tr.appendChild(td);
-            }
-            table.appendChild(tr);
-        });
-        // Here I want to display the number of correct words
-        var wordsElem = document.createElement("p");
-        wordsElem.innerHTML = "Correct words: " + correctWords;
-        summary.appendChild(wordsElem);
-        // Display the final score
-        var scoreElem = document.createElement("p");
-        scoreElem.innerHTML = "Final Score: " + score;
-        summary.appendChild(scoreElem);
+        createSummaryPage()
         return;
     }
 
