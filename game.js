@@ -2,7 +2,7 @@
 // TO DO
 Major
 - Adjust the whole layout to be palyable also on a desktop / avoid the input to be clickable?
-- FIx the rsponsivness of the keyboards
+- Add cgeck for alternative words ... generating the alternative json in the pythin script
 - Deal with words with multiple anagrams
 - Create the daily leaderboards and cookie for user stats like high score and highest number of owrds / time of completion
 
@@ -49,29 +49,33 @@ function initializeWords() {
  // Keybaord section
  const keyboard = document.querySelector(".keyboard");
  const answerInput = document.querySelector("#answer");
-
- keyboard.addEventListener("click", function(event) {
-   if (event.target.classList.contains("key")) {
-     const key = event.target.textContent;
-     if (key === "Send") {
-       // Send the answer
-       // Play the sound
-       document.getElementById("key-press-sound").play();
-       checkAnswer();
-       // Here I need to trigger 
-     } else if (key === "Canc") {
-       // Remove the last character from the answer
-       answerInput.value = answerInput.value.slice(0, -1);
-       // Play the sound
-       document.getElementById("key-press-sound").play();
-     } else {
-       // Add the key to the answer
-       answerInput.value += key;
-       // Play the sound
-       document.getElementById("key-press-sound").play();
-     }
-   }
- });
+ const audio = new Audio("./sounds/click.mp3");
+ 
+keyboard.addEventListener("click", function(event) {
+  if (event.target.classList.contains("key")) {
+    const key = event.target.textContent;
+    if (key === "Send") {
+      // Send the answer
+      // Play the sound
+      audio.currentTime = 0;
+      audio.play();
+      checkAnswer();
+      // Here I need to trigger 
+    } else if (key === "Canc") {
+      // Remove the last character from the answer
+      answerInput.value = answerInput.value.slice(0, -1);
+      // Play the sound
+      audio.currentTime = 0;
+      audio.play();
+    } else {
+      // Add the key to the answer
+      answerInput.value += key;
+      // Play the sound
+      audio.currentTime = 0;
+      audio.play();
+    }
+  }
+});
 // Fetch the words of the day
 // fetch('selected_words.txt')
 //     .then(response => response.text())
