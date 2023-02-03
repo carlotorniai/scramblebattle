@@ -55,14 +55,20 @@ function initializeWords() {
      const key = event.target.textContent;
      if (key === "Send") {
        // Send the answer
+       // Play the sound
+       document.getElementById("key-press-sound").play();
        checkAnswer();
        // Here I need to trigger 
      } else if (key === "Canc") {
        // Remove the last character from the answer
        answerInput.value = answerInput.value.slice(0, -1);
+       // Play the sound
+       document.getElementById("key-press-sound").play();
      } else {
        // Add the key to the answer
        answerInput.value += key;
+       // Play the sound
+       document.getElementById("key-press-sound").play();
      }
    }
  });
