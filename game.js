@@ -1,15 +1,15 @@
 /* Game setup
 // TO DO
 Major
-- Nedd playrs to be presented with the same scramble so need to generate serverside with the script the scramble and write it to a file
-- Adjust the whole layout for the mobile wordle like.
+- Adjust the whole layout to be palyable also on a desktop / avoid the input to be clickable?
+- FIx the rsponsivness of the keyboards
 - Deal with words with multiple anagrams
 - Create the daily leaderboards and cookie for user stats like high score and highest number of owrds / time of completion
 
 Minor
-- See how to deal with the sttic page of recap
-- make sure it works with restarting by : setting the score to zero, 
-- Disable typing in the two seconds between rounds 
+- See how to deal with the static page of recap
+- Make sure it works with restarting by : setting the score to zero, 
+- Disable typing in the two seconds between rounds (add a better overlay for waiting)
 
 
 */
