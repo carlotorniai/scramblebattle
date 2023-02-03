@@ -121,7 +121,7 @@ function createSummaryPage() {
   var table = document.createElement("table");
   summary.appendChild(table);
   
-  var headings = ["Round", "Word", "Answer", "Time", "Points"];
+  var headings = ["Word", "Answer", "Time", "Points"];
   var tr = document.createElement("tr");
   headings.forEach(function(heading) {
   var th = document.createElement("th");
