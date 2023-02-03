@@ -19,7 +19,7 @@ var scrambleList = [];
 var startTime;
 var selectedWord;
 var scrambledWord;
-var gameDuration = 20000; // 20 seconds in milliseconds
+var gameDuration = 30000; // 30 seconds in milliseconds
 var round = 1;
 var intervalId;
 var rounds = [];
