@@ -1,5 +1,7 @@
 import random
 import os
+import json
+
 selected_words = []
 # Define the fixed length of the 5 words
 word_lengths = [5, 6, 7, 8, 9]
@@ -69,7 +71,6 @@ except:
 for word in selected_words:
     scrambled_words.append(scramble(word))
 
-
 # Write the selected words to a new file
 print("Writing scrambled words to file...")
 try:
@@ -79,6 +80,25 @@ except:
     print("An error occurred while writing scrambled_words to file.")
     exit()
 
+
+#Here i need to generate the alternative scramble
+#reading the anagrams.json
+
+# Load the anagrams.json file
+with open("anagrams.json", "r") as f:
+    anagrams = json.load(f)
+
+# Iterate over the selected words
+for word in selected_words:
+    if word in anagrams:
+        # If the word exists in the anagrams, add the word and its values to alternative_scramble
+        alternative_scramble[word] = anagrams[word]
+
+# Save the alternative_scramble dictionary to alternative_scramble.json
+with open("alternative_scramble.json", "w") as f:
+    json.dump(alternative_scramble, f)
+
 print("Script executed successfully")
 print("The words are: " +str(selected_words))
 print("Scrambled words are: " +str(scrambled_words))
+print("Alternative scramble words are: " +str(scrambled_words))
