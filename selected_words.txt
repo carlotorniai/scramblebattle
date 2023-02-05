@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 vento tacere origine tagliare avvertire
+=======
+fondo comodo attento risposta provincia
+>>>>>>> dev
