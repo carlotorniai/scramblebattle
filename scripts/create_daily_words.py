@@ -1,7 +1,6 @@
 import random
 import os
 import json
-from unidecode import unidecode
 
 selected_words = []
 # Define the fixed length of the 5 words
@@ -11,11 +10,9 @@ alternative_scramble = dict()
 
 #remove accents from words
 def remove_accents(word):
-    accented_letters = ['è', 'é', 'à', 'á', 'í', 'ì', 'ò', 'ó', 'ù', 'ú']
-    unaccented_letters = ['e', 'e', 'a', 'a', 'i', 'i', 'o', 'o', 'u', 'u']
-    for i, letter in enumerate(accented_letters):
-        word = word.replace(letter, unaccented_letters[i])
-    return unidecode(word)
+    word = word.replace('à', r'a').replace('á', r'a').replace('è', r'e').replace('é',r'e').replace('ì', r'i').replace('í', r'i').replace('ò', r'o').replace('ó', r'o').replace('ù', r'u').replace('ú', r'u')
+    return word
+
 
 def scramble(word):
     syllables = []
