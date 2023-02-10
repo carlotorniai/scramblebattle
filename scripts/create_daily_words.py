@@ -1,6 +1,7 @@
 import random
 import os
 import json
+from unidecode import unidecode
 
 selected_words = []
 # Define the fixed length of the 5 words
@@ -8,15 +9,13 @@ word_lengths = [5, 6, 7, 8, 9]
 scrambled_words = []
 alternative_scramble = dict()
 
-# Define the scramble function 
-#def scramble(word):
-#    scrambled_word = ""
-#    letters = list(word)
-#    while len(letters) > 0:
-#        random_index = random.randint(0, len(letters) - 1)
-#        scrambled_word += letters[random_index]
-#        letters.pop(random_index)
-#    return scrambled_word
+#remove accents from words
+def remove_accents(word):
+    accented_letters = ['è', 'é', 'à', 'á', 'í', 'ì', 'ò', 'ó', 'ù', 'ú']
+    unaccented_letters = ['e', 'e', 'a', 'a', 'i', 'i', 'o', 'o', 'u', 'u']
+    for i, letter in enumerate(accented_letters):
+        word = word.replace(letter, unaccented_letters[i])
+    return unidecode(word)
 
 def scramble(word):
     syllables = []
@@ -56,7 +55,7 @@ except FileNotFoundError:
 
 # Select 5 random words with the specified lengths
 for length in word_lengths:
-    selected_words.append(random.choice([word for word in words if len(word) == length]))
+    selected_words.append(random.choice([remove_accents(word) for word in words if len(word) == length]))
 
 # Write the selected words to a new file
 print("Writing selected words to file...")
