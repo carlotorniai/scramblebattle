@@ -264,4 +264,3 @@ function checkAnswer() {
     rounds.push(roundInfo);
     console.log(rounds)
   }
-
