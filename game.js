@@ -2,8 +2,6 @@
 // TO DO
 Major
 - Adjust the whole layout to be palyable also on a desktop / avoid the input to be clickable?
-- Add cgeck for alternative words ... generating the alternative json in the pythin script
-- Deal with words with multiple anagrams
 - Create the daily leaderboards and cookie for user stats like high score and highest number of owrds / time of completion
 
 Minor
@@ -14,8 +12,12 @@ Minor
 
 */
 var score = 0;
+var words = []
 var wordList = [];
 var scrambleList = [];
+let alternative_scramble;
+//let alternativescrambledict;
+var alternativescrambledict= {};
 var startTime;
 var selectedWord;
 var scrambledWord;
@@ -46,7 +48,43 @@ function initializeWords() {
 
   }
 
- // Keybaord section
+
+// Alternative version
+let dictionary;
+
+const fetchDictionary = () => {
+  return new Promise((resolve, reject) => {
+    fetch('alternative_scramble.json')
+      .then(response => response.json())
+      .then(data => {
+        resolve(data);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
+fetchDictionary().then(dict => {
+  dictionary = dict;
+  console.log("Alternative scramble", dictionary);
+  console.log(checkallscramble("domandera", "domandare"));
+});
+
+function checkallscramble(answer, correctWord) {
+  const lowerAnswer = answer.toLowerCase();
+  const lowerCorrectWord = correctWord.toLowerCase();
+
+  if (dictionary[lowerCorrectWord] && dictionary[lowerCorrectWord].includes(lowerAnswer)) {
+    console.log(answer + " is the corrected solution for " + correctWord);
+    return true;
+  } else {
+    console.log(answer + " is not a corrected solution for " + correctWord);
+    return false;
+  }
+}
+
+// Keybaord section
  const keyboard = document.querySelector(".keyboard");
  const answerInput = document.querySelector("#answer");
  const audio = new Audio("./sounds/click.mp3");
@@ -57,48 +95,27 @@ keyboard.addEventListener("click", function(event) {
     if (key === "Send") {
       // Send the answer
       // Play the sound
-      audio.currentTime = 0;
       audio.play();
+      audio.currentTime = 0;
       checkAnswer();
       // Here I need to trigger 
     } else if (key === "Canc") {
       // Remove the last character from the answer
       answerInput.value = answerInput.value.slice(0, -1);
       // Play the sound
-      audio.currentTime = 0;
       audio.play();
+      audio.currentTime = 0;
     } else {
       // Add the key to the answer
       answerInput.value += key;
       // Play the sound
-      audio.currentTime = 0;
       audio.play();
+      audio.currentTime = 0;
     }
   }
 });
-// Fetch the words of the day
-// fetch('selected_words.txt')
-//     .then(response => response.text())
-//     .then(data => {
-//       wordList = data.split(" ");
-//       wordList = wordList.map(word => word.toUpperCase());
-//       console.log(wordList);
-//       //here I can a
-//     })
-//     .catch(err => console.log(`Error: ${err}`));
-  
 
-// fetch('scrambled_words.txt')
-//     .then(response => response.text())
-//     .then(data => {
-//       scrambleList = data.split(" ");
-//       scrambleList = scrambleList.map(word => word.toUpperCase());
-//       console.log(" Executed fetch of scramble:" +scrambleList);
-//       //startGame();
-//     })
-//     .catch(err => console.log(`Error: ${err}`));
 
-// startGame();
 
 Promise.all([
   fetch('selected_words.txt')
@@ -117,6 +134,7 @@ Promise.all([
     })
 ]).then(([words, scrambles]) => {
   // do something with words and scrambles
+  //console.log("Provo ancora a stamapre il dict" +alternativescrambledict);
   startGame();
 }).catch(err => console.log(`Error: ${err}`));
 
@@ -161,6 +179,8 @@ function createSummaryPage() {
   document.getElementById("summary").appendChild(summary);
   }
 
+
+// Here I need to read the answer file 
 function startGame() {
     startTime = new Date();
     if (round > 5) {
@@ -223,12 +243,24 @@ function startGame() {
  
 }
 
+
+// Check for alternative scrmabled as 
+
+function isWordInList( alternativescrambledict, key, word) {
+  
+  console.log("Sto cercando "+key+" come soluzione per "+ word+ " denttro il dict "+alternativescrambledict );
+  const words = alternativescrambledict[key];
+  console.log("ho trovato le seuenti soluzioni:"+words)
+  return words.includes(word);
+}
+
 function checkAnswer() {
     var roundScore = 0;
     var roundInfo = {};
     var playerInput = document.getElementById("answer").value;
     var message = document.getElementById("message");
-    if (playerInput === selectedWord) {
+    //if (playerInput === selectedWord) {
+    if (checkallscramble(playerInput,selectedWord) ) {
       clearInterval(intervalId);
       var timeTaken = Date.now() - startTime;
       var timeTaken = Date.now() - startTime;
@@ -264,3 +296,4 @@ function checkAnswer() {
     rounds.push(roundInfo);
     console.log(rounds)
   }
+
