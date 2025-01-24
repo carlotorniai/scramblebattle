@@ -1,1 +1,1 @@
-{"fondo": ["fondo"], "numero": ["numero"], "chiedere": ["chiedere"], "risolvere": ["risolvere"]}
+{"padre": ["padre", "preda"], "figlio": ["figlio"], "destino": ["destino"], "mostrare": ["mostrare", "mostrera"], "discutere": ["discutere"]}
