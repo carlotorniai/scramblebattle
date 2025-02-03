@@ -28,10 +28,10 @@ jobs:
     steps:
 
       - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content
-        with:
-          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-          fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+        uses: actions/checkout@v4 # checkout the repository content
+      #  with:
+      #    persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+      #    fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
     
       - name: setup python
         uses: actions/setup-python@v4
@@ -42,7 +42,7 @@ jobs:
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
         run: python ./scripts/create_daily_words.py
-
+    
       - name: commit files
         run: |
           git config --local user.email "action@github.com"
@@ -58,15 +58,16 @@ jobs:
   # old part        
   # Single deploy job since we're just deploying
   deploy:
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
@@ -74,4 +75,4 @@ jobs:
           path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
