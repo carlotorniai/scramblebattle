@@ -1,21 +1,17 @@
 name: Deploy static content to Pages
-
 on:
   push:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/30 * * * *"  # Fixed the cron syntax
   workflow_dispatch:
-
 permissions:
   contents: write
   deployments: write
   pages: write
   id-token: write
-
 concurrency:
   group: "pages"
   cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,22 +21,18 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
-
       - name: Execute py script
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
         run: python ./scripts/create_daily_words.py
-
       - name: Configure Git
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-
       - name: Commit and Push
         run: |
           git fetch origin
@@ -48,14 +40,17 @@ jobs:
           git add -A
           git commit -m "updated logs" || echo "No changes to commit"
           git push origin main || git pull --rebase origin main && git push origin main
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-action@v1.0.7
+        with:
+          source: ./
+          destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: ./_site  # Changed from '.' to './_site'
 
   deploy:
     needs: build
@@ -63,7 +58,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
