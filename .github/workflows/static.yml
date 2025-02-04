@@ -23,7 +23,8 @@ jobs:
       - name: Checkout repo content
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for proper git operations
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -35,23 +36,18 @@ jobs:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
         run: python ./scripts/create_daily_words.py
 
-      - name: Commit files
+      - name: Configure Git
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Commit and Push
+        run: |
+          git fetch origin
+          git reset --hard origin/main
           git add -A
-          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
-
-      - name: Pull changes
-        run: |
-          git pull --rebase origin main
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
-          force: true
+          git commit -m "updated logs" || echo "No changes to commit"
+          git push origin main || git pull --rebase origin main && git push origin main
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
