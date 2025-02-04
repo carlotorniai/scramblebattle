@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout repo content
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper git operations
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -40,11 +42,16 @@ jobs:
           git add -A
           git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
 
+      - name: Pull changes
+        run: |
+          git pull --rebase origin main
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
+          force: true
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
