@@ -1,11 +1,9 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
-
 on:
   # Runs on pushes targeting the default branch
   schedule:
-    - cron: "*/30 * * * *"
-
+    - cron: "*/30 * * * *"  # Fixed cron syntax
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -21,39 +19,44 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo content
+        uses: actions/checkout@v4
 
-      - name: checkout repo content
-        uses: actions/checkout@v4 # checkout the repository content
-      #  with:
-      #    persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
-      #    fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
-    
-      - name: setup python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8' # install the python version needed
+          python-version: '3.8'
 
-      - name: execute py script # run main.py
+      - name: Execute py script
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
         run: python ./scripts/create_daily_words.py
-    
-      - name: commit files
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'  # Upload the entire repository
+
+      - name: Commit files
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add -A
           git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main 
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
