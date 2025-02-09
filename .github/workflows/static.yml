@@ -1,57 +1,59 @@
+# Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
+
 on:
-  push:
+  # Runs on pushes targeting the default branch
   schedule:
-    - cron: "*/30 * * * *"  # Fixed the cron syntax
+    - cron: "*/30 * * * *"
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: write
   deployments: write
   pages: write
   id-token: write
+
+# Allow one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo content
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-      - name: Setup Python
+
+      - name: checkout repo content
+        uses: actions/checkout@v4 # checkout the repository content
+      #  with:
+      #    persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal access token.
+      #    fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    
+      - name: setup python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
-      - name: Execute py script
+          python-version: '3.8' # install the python version needed
+
+      - name: execute py script # run main.py
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
         run: python ./scripts/create_daily_words.py
-      - name: Configure Git
+    
+      - name: commit files
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-      - name: Commit and Push
-        run: |
-          git fetch origin
-          git reset --hard origin/main
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add -A
-          git commit -m "updated logs" || echo "No changes to commit"
-          git push origin main || git pull --rebase origin main && git push origin main
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-action@v1.0.7
+          git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          source: ./
-          destination: ./_site
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./_site  # Changed from '.' to './_site'
-
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main 
   deploy:
     needs: build
     runs-on: ubuntu-latest
