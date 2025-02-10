@@ -35,10 +35,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Create artifact directory
+      - name: Prepare artifact directory
         run: |
+          rm -rf _site || true
           mkdir _site
-          cp -r * _site/ || true
+          cp -r * _site/ 2>/dev/null || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
